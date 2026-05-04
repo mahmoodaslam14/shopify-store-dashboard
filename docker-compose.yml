@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dashboard
+      POSTGRES_PASSWORD: dashboard_dev_password
+      POSTGRES_DB: customer_dashboard
+    volumes:
+      - customer_dashboard_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashboard -d customer_dashboard"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  customer_dashboard_pgdata:
